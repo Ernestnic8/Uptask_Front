@@ -1,10 +1,13 @@
 import api from "@/lib/axios";
 import { isAxiosError } from "axios";
-import type {
-  ConfirmToken,
-  RequestConfirmationCodeForm,
-  UserLoginForm,
-  UserRegistrationForm,
+import {
+  userSchema,
+  type ConfirmToken,
+  type ForgotPasswordForm,
+  type NewPasswordForm,
+  type RequestConfirmationCodeForm,
+  type UserLoginForm,
+  type UserRegistrationForm,
 } from "@/types";
 
 export async function createAccount(formData: UserRegistrationForm) {
@@ -44,11 +47,68 @@ export async function requestNewCode(formData: RequestConfirmationCodeForm) {
 }
 
 export async function login(formData: UserLoginForm) {
-  try{
+  try {
     const url = "/auth/login";
     const { data } = await api.post<string>(url, formData);
+    localStorage.setItem("AUTH_TOKEN", data);
     return data;
-  } catch(error) {
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message);
+    }
+  }
+}
+
+export async function forgorPassword(formData: ForgotPasswordForm) {
+  try {
+    const url = "/auth/forgot-password";
+    const { data } = await api.post<string>(url, formData);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message);
+    }
+  }
+}
+
+export async function validateToken(formData: ConfirmToken) {
+  try {
+    const url = "/auth/validate-token";
+    const { data } = await api.post<string>(url, formData);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message);
+    }
+  }
+}
+
+export async function updatePassWordWithToken({
+  formData,
+  token,
+}: {
+  formData: NewPasswordForm;
+  token: ConfirmToken["token"];
+}) {
+  try {
+    const url = `/auth/update-password/${token}`;
+    const { data } = await api.post<string>(url, formData);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message);
+    }
+  }
+}
+
+export async function getUser() {
+  try {
+    const { data } = await api("/auth/user");
+    const res = userSchema.safeParse(data);
+    if (res.success) {
+      return res.data;
+    }
+  } catch (error) {
     if (isAxiosError(error) && error.response) {
       throw new Error(error.response.data.message);
     }

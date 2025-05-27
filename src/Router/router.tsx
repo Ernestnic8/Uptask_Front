@@ -9,6 +9,8 @@ import LoginPage from "@pages/auth/LoginPage";
 import RegisterPage from "@pages/auth/RegisterPage";
 import ConfirmAccountPage from '@pages/auth/ConfirmAccountPage';
 import RequestNewCode from "@pages/auth/RequestNewCode";
+import NewPasswordPage from "@pages/auth/NewPasswordPage";
+import ForgotPasswordPage from "@pages/auth/ForgotPasswordPage";
 
 const Router = () => {
   return (
@@ -31,6 +33,8 @@ const Router = () => {
           <Route path="/auth/register" element={<RegisterPage />} />
           <Route path="/auth/confirm" element={<ConfirmAccountPage />} />
           <Route path="/auth/request" element={<RequestNewCode />} />
+          <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/auth/new-password" element={<NewPasswordPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

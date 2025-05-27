@@ -57,7 +57,7 @@ export async function updateProject({ formData, projectId }: ProjectAPIType) {
   } catch (err) {
     if (isAxiosError(err) && err.response) {
       const { data } = err.response;
-      throw new Error(data.message); 
+      throw new Error(data.message);
     }
   }
 }

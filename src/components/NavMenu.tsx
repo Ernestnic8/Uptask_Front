@@ -1,14 +1,25 @@
-import { Fragment } from 'react'
-import { Popover, Transition } from '@headlessui/react'
-import { Bars3Icon } from '@heroicons/react/20/solid'
-import { Link } from 'react-router-dom'
+import { Fragment } from "react";
+import { Popover, Transition } from "@headlessui/react";
+import { Bars3Icon } from "@heroicons/react/20/solid";
+import { Link } from "react-router-dom";
+import type { User } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
 
-export default function NavMenu() {
+type NavMenuProps = {
+  name: User["name"];
+};
 
+export default function NavMenu({ name }: NavMenuProps) {
+  const queryClient = useQueryClient();
+
+  const logout = () => {
+    localStorage.removeItem("AUTH_TOKEN");
+    queryClient.invalidateQueries({ queryKey: ["user"] });
+  };
   return (
     <Popover className="relative">
-      <Popover.Button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 p-1 rounded-lg bg-purple-400">
-        <Bars3Icon className='w-8 h-8 text-white ' />
+      <Popover.Button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 p-1 rounded-lg bg-purple-400 cursor-pointer">
+        <Bars3Icon className="w-8 h-8 text-white " />
       </Popover.Button>
 
       <Transition
@@ -21,20 +32,18 @@ export default function NavMenu() {
         leaveTo="opacity-0 translate-y-1"
       >
         <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen lg:max-w-min -translate-x-1/2 lg:-translate-x-48">
-          <div className="w-full lg:w-56 shrink rounded-xl bg-white p-4 text-sm font-semibold leading-6 text-gray-900 shadow-lg ring-1 ring-gray-900/5">
-            <p className='text-center'>Hola: Usuario</p>
-            <Link
-              to='/profile'
-              className='block p-2 hover:text-purple-950'
-            >Mi Perfil</Link>
-            <Link
-              to='/'
-              className='block p-2 hover:text-purple-950'
-            >Mis Proyectos</Link>
+          <div className="w-full lg:w-56 shrink rounded-xl bg-white p-4 text-sm font-semibold leading-6 text-gray-900 shadow-lg ring-1 ring-gray-900/5 ">
+            <p className="text-center">Hola: {name}</p>
+            <Link to="/profile" className="block p-2 hover:text-purple-500">
+              Mi Perfil
+            </Link>
+            <Link to="/" className="block p-2 hover:text-purple-500">
+              Mis Proyectos
+            </Link>
             <button
-              className='block p-2 hover:text-purple-950'
-              type='button'
-              onClick={() => { }}
+              className="block p-2 hover:text-purple-500 cursor-pointer"
+              type="button"
+              onClick={logout}
             >
               Cerrar Sesión
             </button>
@@ -42,5 +51,5 @@ export default function NavMenu() {
         </Popover.Panel>
       </Transition>
     </Popover>
-  )
+  );
 }

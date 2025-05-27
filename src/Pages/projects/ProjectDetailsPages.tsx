@@ -20,7 +20,7 @@ const ProjectDetailsPages = () => {
 
   if (isLoading) return <p>Cargando...</p>;
   if (isError) {
-    toast.error(error.message);
+    toast.error(error.message, {toastId: "error-project-details"});
     return <Navigate to="/" />;
   }
   if (data) {

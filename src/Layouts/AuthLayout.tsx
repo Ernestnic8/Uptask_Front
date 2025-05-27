@@ -1,7 +1,5 @@
 import Logo from "@components/Logo";
 import { Outlet } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import { Flip } from "react-toastify";
 
 const AuthLayout = () => {
   return (
@@ -14,20 +12,6 @@ const AuthLayout = () => {
           </div>
         </div>
       </div>
-
-      <ToastContainer
-        position="top-right"
-        autoClose={3500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Flip}
-      />
     </>
   );
 };
