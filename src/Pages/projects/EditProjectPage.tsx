@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getProjectById } from "@/api/projectApi";
 import { toast } from "react-toastify";
 import EditProjectForm from "@/components/Projects/EditProjectForm";
+import Spinner from "@components/Spinner/Spinner";
 
 const EditProjectPage = () => {
   const params = useParams();
@@ -10,10 +11,10 @@ const EditProjectPage = () => {
   const { data, isLoading, error, isError } = useQuery({
     queryKey: ["projectById", projectId],
     queryFn: () => getProjectById(projectId),
-    retry: false,
+    retry: 2,
   });
 
-  if (isLoading) return <p>Cargando...</p>;
+  if (isLoading) return <Spinner />;
   if (isError) {
     toast.error(error.message);
     return <Navigate to="/" />;

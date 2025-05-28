@@ -13,7 +13,7 @@ export async function createProject(dato: ProjectFormData) {
   } catch (err) {
     if (isAxiosError(err) && err.response) {
       const { data } = err.response;
-      throw new Error(data.message);
+      throw new Error(data.error);
     }
   }
 }
@@ -40,7 +40,7 @@ export async function getProjectById(id: Project["_id"]) {
   } catch (err) {
     if (isAxiosError(err) && err.response) {
       const { data } = err.response;
-      throw new Error(data.message);
+      throw new Error(data.error);
     }
   }
 }
@@ -57,7 +57,7 @@ export async function updateProject({ formData, projectId }: ProjectAPIType) {
   } catch (err) {
     if (isAxiosError(err) && err.response) {
       const { data } = err.response;
-      throw new Error(data.message);
+      throw new Error(data.error);
     }
   }
 }
@@ -69,7 +69,7 @@ export async function deleteProject(id: Project["_id"]) {
   } catch (err) {
     if (isAxiosError(err) && err.response) {
       const { data } = err.response;
-      throw new Error(data.message);
+      throw new Error(data.error);
     }
   }
 }

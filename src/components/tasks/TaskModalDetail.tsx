@@ -25,7 +25,7 @@ export default function TaskModalDetails() {
     queryKey: ["task", taskId],
     queryFn: () => getTaskById({ projectId, taskId }),
     enabled: !!taskId,
-    retry: false,
+    retry: 2,
   });
 
   const queryClient = useQueryClient();

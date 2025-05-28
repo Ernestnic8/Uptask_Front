@@ -38,7 +38,7 @@ const EditProjectForm = ({ data, projectId }: Props) => {
     defaultValues: {
       projectName: data.projectName,
       clientName: data.clientName,
-      description: data.clientName,
+      description: data.description,
     },
   });
 

@@ -24,12 +24,14 @@ export type ConfirmToken = Pick<Auth, "token">;
 
 /**Users */
 
-export const userSchema = authSchema.pick({
-  name: true,
-  email: true,
-}).extend({
-  _id: z.string(),
-})
+export const userSchema = authSchema
+  .pick({
+    name: true,
+    email: true,
+  })
+  .extend({
+    _id: z.string(),
+  });
 
 export type User = z.infer<typeof userSchema>;
 
@@ -65,6 +67,11 @@ export const ProjectSchema = z.object({
   projectName: z.string(),
   clientName: z.string(),
   description: z.string(),
+  manager: z.string(
+    userSchema.pick({
+      _id: true,
+    })
+  ),
 });
 
 export type Project = z.infer<typeof ProjectSchema>;
@@ -79,5 +86,17 @@ export const dashboardProjectSchema = z.array(
     projectName: true,
     clientName: true,
     description: true,
+    manager: true,
   })
 );
+
+/**Team */
+
+export const teamMemberSchema = userSchema.pick({
+  name: true,
+  email: true,
+  _id: true,
+});
+
+export type TeamMember = z.infer<typeof teamMemberSchema>;
+export type TeamMemberForm = Pick<TeamMember, "email">;
