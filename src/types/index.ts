@@ -35,6 +35,19 @@ export const userSchema = authSchema
 
 export type User = z.infer<typeof userSchema>;
 
+/**Notes */
+
+export const noteSchema = z.object({
+  _id: z.string(),
+  content: z.string(),
+  createdBy: userSchema,
+  task: z.string(),
+  createdAt: z.string(),
+});
+
+export type Note = z.infer<typeof noteSchema>;
+export type NoteFormData = Pick<Note, "content">;
+
 /**Taskss */
 
 export const taskStatusSchema = z.enum([
@@ -53,6 +66,14 @@ export const taskSchema = z.object({
   description: z.string(),
   project: z.string(),
   status: taskStatusSchema,
+  completedBy: z.array(
+    z.object({
+      _id: z.string(),
+      user: userSchema,
+      status: taskStatusSchema,
+    })
+  ),
+  notes: z.array(noteSchema.extend({ createdBy: userSchema })),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

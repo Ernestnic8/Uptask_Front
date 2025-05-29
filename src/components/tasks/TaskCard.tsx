@@ -9,9 +9,10 @@ import { toast } from "react-toastify";
 
 type TaskCardProps = {
   task: Task;
+  canEdit?: boolean;
 };
 
-const TaskCard = ({ task }: TaskCardProps) => {
+const TaskCard = ({ task, canEdit }: TaskCardProps) => {
   const navigate = useNavigate();
 
   const params = useParams();
@@ -22,20 +23,21 @@ const TaskCard = ({ task }: TaskCardProps) => {
   const { mutate } = useMutation({
     mutationFn: deleteTask,
     onError: (e) => {
-        toast.error(e.message);
+      toast.error(e.message);
     },
     onSuccess: (data) => {
-        toast.success(data);
-        queryClient.invalidateQueries({queryKey:["projectById", projectId]});
+      toast.success(data);
+      queryClient.invalidateQueries({ queryKey: ["projectById", projectId] });
     },
-  }); 
+  });
 
   return (
     <li className="p-5 bg-white border-slate-300 flex justify-between rounded-lg gap-3">
       <div className="min-w-0 flex flex-col gap-y-4">
         <button
           type="button"
-          className="text-slate-600 text-xl font-bold  text-left"
+          className="text-slate-600 text-xl font-bold cursor-pointer text-left"
+          onClick={() => navigate(location.pathname + `?viewTask=${task._id}`)}
         >
           {task.name}
         </button>
@@ -68,27 +70,31 @@ const TaskCard = ({ task }: TaskCardProps) => {
                   Ver Tarea
                 </button>
               </Menu.Item>
-              <Menu.Item>
-                <button
-                  type="button"
-                  className="block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer"
-                  onClick={() =>
-                    navigate(location.pathname + `?editTask=${task._id}`)
-                  }
-                >
-                  Editar Tarea
-                </button>
-              </Menu.Item>
+              {canEdit && (
+                <>
+                  <Menu.Item>
+                    <button
+                      type="button"
+                      className="block px-3 py-1 text-sm leading-6 text-gray-900 cursor-pointer"
+                      onClick={() =>
+                        navigate(location.pathname + `?editTask=${task._id}`)
+                      }
+                    >
+                      Editar Tarea
+                    </button>
+                  </Menu.Item>
 
-              <Menu.Item>
-                <button
-                  type="button"
-                  className="block px-3 py-1 text-sm leading-6 text-red-500 cursor-pointer"
-                  onClick={()=>mutate({projectId, taskId: task._id})}
-                >
-                  Eliminar Tarea
-                </button>
-              </Menu.Item>
+                  <Menu.Item>
+                    <button
+                      type="button"
+                      className="block px-3 py-1 text-sm leading-6 text-red-500 cursor-pointer"
+                      onClick={() => mutate({ projectId, taskId: task._id })}
+                    >
+                      Eliminar Tarea
+                    </button>
+                  </Menu.Item>
+                </>
+              )}
             </Menu.Items>
           </Transition>
         </Menu>

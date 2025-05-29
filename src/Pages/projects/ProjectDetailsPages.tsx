@@ -10,6 +10,7 @@ import TaskModalDetails from "@components/tasks/TaskModalDetail";
 import Spinner from "@components/Spinner/Spinner";
 import { useAuth } from "@hooks/useAuth";
 import isManager from "@utils/policies";
+import { useMemo } from "react";
 
 const ProjectDetailsPages = () => {
   const { data: user, isLoading: authLoading } = useAuth();
@@ -21,6 +22,8 @@ const ProjectDetailsPages = () => {
     queryFn: () => getProjectById(projectId),
     retry: 2,
   });
+
+  const canEdit = useMemo(() => data?.manager === user?._id, [data, user]);
 
   if (isLoading && authLoading) return <Spinner />;
   if (isError) {
@@ -52,7 +55,7 @@ const ProjectDetailsPages = () => {
           </nav>
         )}
 
-        <TaskList tasks={data.task} />
+        <TaskList tasks={data.task} canEdit={canEdit} />
         <AddTaskModal />
         <EditTaskData />
         <TaskModalDetails />
